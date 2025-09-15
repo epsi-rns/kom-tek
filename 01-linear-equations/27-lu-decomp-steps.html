@@ -1,0 +1,658 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step-by-Step LU Decomposition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+    <style>
+    /* Reset and isolate our component from WordPress styles */
+    .lu-decomposition-container * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .lu-decomposition-container {
+        all: initial; /* Reset all inherited styles */
+        display: block;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        max-width: 100%;
+        margin: 20px 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #2c3e50;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .lu-decomposition-container h1,
+    .lu-decomposition-container h2,
+    .lu-decomposition-container h3 {
+        all: initial;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        display: block;
+        margin: 0 0 20px 0;
+        padding: 0;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .lu-decomposition-container h1 {
+        font-size: 28px;
+        text-align: center;
+        padding: 25px 25px 15px 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin: 0;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .lu-decomposition-container h2 {
+        font-size: 20px;
+        padding: 0 25px;
+        margin: 0 0 15px 0;
+        color: #4a5568;
+    }
+
+    .lu-decomposition-container .container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        padding: 25px;
+        margin: 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .lu-decomposition-container .container:last-child {
+        border-bottom: none;
+        border-radius: 0 0 12px 12px;
+    }
+
+    /* Input styling */
+    .lu-decomposition-container .input-matrix {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid #e2e8f0;
+    }
+
+    .lu-decomposition-container .input-row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+
+    .lu-decomposition-container .input-cell {
+        width: 80px;
+    }
+
+    .lu-decomposition-container input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #d2d6dc;
+        border-radius: 6px;
+        font-size: 16px;
+        text-align: center;
+        background: white;
+        color: #2d3748;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .lu-decomposition-container input[type="number"]:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .lu-decomposition-container input[type="number"]:hover {
+        border-color: #a0aec0;
+    }
+
+    /* Matrix display */
+    .lu-decomposition-container .matrix {
+        background: white;
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .lu-decomposition-container .matrix-title {
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #4a5568;
+        font-size: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .lu-decomposition-container .matrix-content {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #2d3748;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+    }
+
+    /* Controls */
+    .lu-decomposition-container .controls {
+        display: flex;
+        gap: 12px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .lu-decomposition-container button {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        flex: 1;
+        min-width: 120px;
+        box-shadow: 0 2px 6px rgba(66, 153, 225, 0.3);
+    }
+
+    .lu-decomposition-container button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+    }
+
+    .lu-decomposition-container button:active {
+        transform: translateY(0);
+    }
+
+    .lu-decomposition-container button:disabled {
+        background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .lu-decomposition-container #autoBtn {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        box-shadow: 0 2px 6px rgba(72, 187, 120, 0.3);
+    }
+
+    .lu-decomposition-container #resetBtn {
+        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        box-shadow: 0 2px 6px rgba(245, 101, 101, 0.3);
+    }
+
+    /* Step info */
+    .lu-decomposition-container .step-info {
+        background: linear-gradient(135deg, #ebf4ff 0%, #d6e6ff 100%);
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #4299e1;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .lu-decomposition-container .step-number {
+        font-weight: 700;
+        color: #4299e1;
+        margin-right: 8px;
+    }
+
+    .lu-decomposition-container .current-step {
+        background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+        border-left: 4px solid #38a169;
+    }
+
+    .lu-decomposition-container .current-step .step-number {
+        color: #38a169;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .lu-decomposition-container .input-row {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .lu-decomposition-container .input-cell {
+            width: 70px;
+        }
+        
+        .lu-decomposition-container .controls {
+            flex-direction: column;
+        }
+        
+        .lu-decomposition-container button {
+            min-width: auto;
+        }
+        
+        .lu-decomposition-container h1 {
+            font-size: 24px;
+            padding: 20px 15px;
+        }
+        
+        .lu-decomposition-container .container {
+            padding: 20px 15px;
+        }
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        .lu-decomposition-container {
+            border: 2px solid #000;
+        }
+        
+        .lu-decomposition-container input[type="number"] {
+            border: 2px solid #000;
+        }
+        
+        .lu-decomposition-container .matrix {
+            border: 2px solid #000;
+        }
+    }
+
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .lu-decomposition-container * {
+            transition: none !important;
+            animation: none !important;
+        }
+        
+        .lu-decomposition-container button:hover {
+            transform: none;
+        }
+    }
+    </style>
+</head>
+<body>
+<div class="lu-decomposition-container">
+    <h1>Step-by-Step LU Decomposition with Partial Pivoting</h1>
+    
+    <div class="container">
+        <h2>Input Matrix</h2>
+        <div class="input-matrix" id="inputMatrix">
+            <!-- Matrix input will be generated here -->
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Algorithm Controls</h2>
+        <div class="controls">
+            <button id="prevBtn" disabled>Previous Step</button>
+            <button id="nextBtn">Next Step</button>
+            <button id="autoBtn">Auto Run</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        <div id="stepInfo" class="step-info">
+            Click "Next Step" to begin the decomposition...
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Current State</h2>
+        <div class="matrix">
+            <div class="matrix-title">Working Matrix:</div>
+            <div id="currentMatrix"></div>
+        </div>
+        <div class="matrix">
+            <div class="matrix-title">Lower Triangular Matrix L:</div>
+            <div id="lMatrix"></div>
+        </div>
+        <div class="matrix">
+            <div class="matrix-title">Upper Triangular Matrix U:</div>
+            <div id="uMatrix"></div>
+        </div>
+        <div class="matrix">
+            <div class="matrix-title">Permutation Matrix P:</div>
+            <div id="pMatrix"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Algorithm Steps</h2>
+        <div id="stepsContainer"></div>
+    </div>
+</div>
+
+    <script>
+        // Global variables to track algorithm state
+        let currentStep = 0;
+        let steps = [];
+        let algorithmState = null;
+
+        // Initialize the matrix input
+        function generateMatrixInput() {
+            const defaultMatrix = [
+                [2, 1, -1],
+                [-3, -1, 2],
+                [-2, 1, 2]
+            ];
+            
+            const inputMatrixDiv = document.getElementById('inputMatrix');
+            inputMatrixDiv.innerHTML = '';
+            
+            for (let i = 0; i < 3; i++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'input-row';
+                
+                for (let j = 0; j < 3; j++) {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = 'input-cell';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = 'any';
+                    input.value = defaultMatrix[i][j];
+                    input.id = `cell-${i}-${j}`;
+                    
+                    cellDiv.appendChild(input);
+                    rowDiv.appendChild(cellDiv);
+                }
+                
+                inputMatrixDiv.appendChild(rowDiv);
+            }
+        }
+
+        // Get the input matrix
+        function getInputMatrix() {
+            const matrix = [];
+            
+            for (let i = 0; i < 3; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < 3; j++) {
+                    const inputElement = document.getElementById(`cell-${i}-${j}`);
+                    const value = parseFloat(inputElement.value);
+                    matrix[i][j] = isNaN(value) ? 0 : value;
+                }
+            }
+            
+            return matrix;
+        }
+
+        // Format matrix for display with proper HTML line breaks
+        function formatMatrix(matrix) {
+            if (!matrix) return 'Invalid matrix';
+    
+            try {
+                const matrixArray = math.isMatrix(matrix) ? matrix.toArray() : matrix;
+                let output = '';
+        
+                for (let i = 0; i < matrixArray.length; i++) {
+                    output += '[ ';
+                    for (let j = 0; j < matrixArray[i].length; j++) {
+                        output += matrixArray[i][j].toFixed(4).padStart(8) + ' ';
+                    }
+                    output += ' ]<br>';  // Use <br> instead of \n
+                }
+        
+                return output;
+            } catch (e) {
+                return 'Error formatting matrix';
+            }
+        }
+        
+        // LU decomposition with step-by-step tracking
+        function createLUSteps(A) {
+            const steps = [];
+            const n = A.size()[0];
+            let L = math.identity(n);
+            let U = math.zeros(n, n);
+            let P = math.identity(n);
+            let currentA = math.clone(A);
+            
+            steps.push({
+                type: 'init',
+                message: 'Initialization: Created identity matrices for L and P, zero matrix for U',
+                L: math.clone(L),
+                U: math.clone(U),
+                P: math.clone(P),
+                A: math.clone(currentA)
+            });
+            
+            for (let k = 0; k < n; k++) {
+                // Step 1: Find pivot
+                let maxRow = k;
+                let maxVal = Math.abs(currentA.get([k, k]));
+                
+                for (let i = k + 1; i < n; i++) {
+                    const currentVal = Math.abs(currentA.get([i, k]));
+                    if (currentVal > maxVal) {
+                        maxVal = currentVal;
+                        maxRow = i;
+                    }
+                }
+                
+                if (maxRow !== k) {
+                    // Swap rows in currentA, L, and P
+                    steps.push({
+                        type: 'pivot',
+                        message: `Column ${k}: Found pivot element |${maxVal.toFixed(4)}| at row ${maxRow}`,
+                        L: math.clone(L),
+                        U: math.clone(U),
+                        P: math.clone(P),
+                        A: math.clone(currentA),
+                        highlight: {row: maxRow, col: k}
+                    });
+                    
+                    // Swap rows
+                    for (let j = 0; j < n; j++) {
+                        const temp = currentA.get([k, j]);
+                        currentA.set([k, j], currentA.get([maxRow, j]));
+                        currentA.set([maxRow, j], temp);
+                    }
+                    
+                    // Swap rows in L for columns 0 to k-1
+                    for (let j = 0; j < k; j++) {
+                        const temp = L.get([k, j]);
+                        L.set([k, j], L.get([maxRow, j]));
+                        L.set([maxRow, j], temp);
+                    }
+                    
+                    // Swap rows in P
+                    for (let j = 0; j < n; j++) {
+                        const temp = P.get([k, j]);
+                        P.set([k, j], P.get([maxRow, j]));
+                        P.set([maxRow, j], temp);
+                    }
+                    
+                    steps.push({
+                        type: 'swap',
+                        message: `Swapped rows ${k} and ${maxRow}`,
+                        L: math.clone(L),
+                        U: math.clone(U),
+                        P: math.clone(P),
+                        A: math.clone(currentA)
+                    });
+                } else {
+                    steps.push({
+                        type: 'pivot',
+                        message: `Column ${k}: Pivot element |${maxVal.toFixed(4)}| is already in position`,
+                        L: math.clone(L),
+                        U: math.clone(U),
+                        P: math.clone(P),
+                        A: math.clone(currentA),
+                        highlight: {row: k, col: k}
+                    });
+                }
+                
+                // Set U[k][k] and L[i][k]
+                U.set([k, k], currentA.get([k, k]));
+                
+                for (let i = k; i < n; i++) {
+                    L.set([i, k], currentA.get([i, k]) / U.get([k, k]));
+                }
+                
+                steps.push({
+                    type: 'decompose',
+                    message: `Column ${k}: Set U[${k},${k}] = ${U.get([k, k]).toFixed(4)} and L[i,${k}] values`,
+                    L: math.clone(L),
+                    U: math.clone(U),
+                    P: math.clone(P),
+                    A: math.clone(currentA)
+                });
+                
+                // Calculate U[k][j] for j = k+1 to n-1
+                for (let j = k + 1; j < n; j++) {
+                    U.set([k, j], currentA.get([k, j]));
+                    
+                    // Update currentA[i][j] for the next column
+                    for (let i = k + 1; i < n; i++) {
+                        const newValue = currentA.get([i, j]) - L.get([i, k]) * U.get([k, j]);
+                        currentA.set([i, j], newValue);
+                    }
+                }
+                
+                steps.push({
+                    type: 'update',
+                    message: `Column ${k}: Updated U row and remaining matrix`,
+                    L: math.clone(L),
+                    U: math.clone(U),
+                    P: math.clone(P),
+                    A: math.clone(currentA)
+                });
+            }
+            
+            // Final verification step
+            const PA = math.multiply(P, A);
+            const LU = math.multiply(L, U);
+            const isEqual = math.deepEqual(math.round(PA, 10), math.round(LU, 10));
+            
+            steps.push({
+                type: 'final',
+                message: isEqual ? 
+                    '✓ Decomposition successful: P * A = L * U' : 
+                    '✗ Decomposition failed: P * A ≠ L * U',
+                L: L,
+                U: U,
+                P: P,
+                A: A,
+                verification: {PA: PA, LU: LU, isEqual: isEqual}
+            });
+            
+            return steps;
+        }
+
+        // Display current step with proper HTML formatting
+        function displayStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= steps.length) return;
+            
+            const step = steps[stepIndex];
+            const stepInfo = document.getElementById('stepInfo');
+            const currentMatrixDiv = document.getElementById('currentMatrix');
+            const lMatrixDiv = document.getElementById('lMatrix');
+            const uMatrixDiv = document.getElementById('uMatrix');
+            const pMatrixDiv = document.getElementById('pMatrix');
+            
+            // Update step info
+            stepInfo.innerHTML = `<span class="step-number">Step ${stepIndex + 1}/${steps.length}:</span> ${step.message}`;
+            
+            // Update matrices with innerHTML to render <br> tags
+            currentMatrixDiv.innerHTML = formatMatrix(step.A);
+            lMatrixDiv.innerHTML = formatMatrix(step.L);
+            uMatrixDiv.innerHTML = formatMatrix(step.U);
+            pMatrixDiv.innerHTML = formatMatrix(step.P);
+            
+            // Update steps list
+            const stepsContainer = document.getElementById('stepsContainer');
+            stepsContainer.innerHTML = '';
+            
+            steps.forEach((s, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step-info';
+                if (index === stepIndex) {
+                    stepDiv.classList.add('current-step');
+                }
+                stepDiv.innerHTML = `<span class="step-number">${index + 1}.</span> ${s.message}`;
+                stepsContainer.appendChild(stepDiv);
+            });
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = stepIndex === 0;
+            document.getElementById('nextBtn').disabled = stepIndex === steps.length - 1;
+        }
+
+        // Initialize the algorithm
+        function initAlgorithm() {
+            const inputMatrix = getInputMatrix();
+            const A = math.matrix(inputMatrix);
+            
+            steps = createLUSteps(A);
+            currentStep = 0;
+            
+            displayStep(currentStep);
+        }
+
+        // Event handlers
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                displayStep(currentStep);
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                displayStep(currentStep);
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            initAlgorithm();
+        });
+
+        document.getElementById('autoBtn').addEventListener('click', () => {
+            let interval = setInterval(() => {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    displayStep(currentStep);
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1500);
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            generateMatrixInput();
+            
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (steps.length === 0) {
+                    initAlgorithm();
+                } else if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    displayStep(currentStep);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
