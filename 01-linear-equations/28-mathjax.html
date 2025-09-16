@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Persamaan Linear Segitiga</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        .equation {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .explanation {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .steps {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .step {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .step:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transformasi Sistem Persamaan Linear ke Bentuk Segitiga</h1>
+        
+        <div class="explanation">
+            <p>Algoritma yang efisien untuk menyelesaikan sistem persamaan linear secara numerik adalah dengan mengubah sistem asli menjadi sistem <em>segitiga</em> yang ekuivalen.</p>
+        </div>
+
+        <div class="equation">
+            <p>Sistem segitiga atas dapat ditulis sebagai:</p>
+            \[T\mathbf{y} = \mathbf{c}\]
+            <p>di mana \(T\) adalah <em>matriks segitiga</em>: jenis khusus matriks persegi di mana elemen-elemen di bawah atau di atas diagonal utama bernilai nol.</p>
+        </div>
+
+        <h2>Substitusi Mundur (Back Substitution)</h2>
+        
+        <div class="equation">
+            <p>Sistem segitiga atas dapat diselesaikan dengan mudah menggunakan <em>substitusi mundur</em>:</p>
+            \[y_{i} = \frac{1}{T_{ii}} \left( c_{i} - \sum_{k=i+1}^{n} T_{ik} y_{k} \right), \quad i = n, \ldots, 1\]
+        </div>
+
+        <h2>Bagaimana Persamaan Biasa Menjadi Bentuk Ini?</h2>
+        
+        <div class="steps">
+            <p>Proses transformasi sistem persamaan linear biasa menjadi bentuk segitiga melibatkan beberapa langkah:</p>
+            
+            <div class="step">
+                <strong>Langkah 1:</strong> Memulai dengan sistem persamaan linear biasa \(A\mathbf{x} = \mathbf{b}\)
+            </div>
+            
+            <div class="step">
+                <strong>Langkah 2:</strong> Menerapkan eliminasi Gauss untuk membuat matriks segitiga atas
+            </div>
+            
+            <div class="step">
+                <strong>Langkah 3:</strong> Melakukan operasi baris elementer untuk membuat elemen di bawah diagonal utama menjadi nol
+            </div>
+            
+            <div class="step">
+                <strong>Langkah 4:</strong> Setelah matriks menjadi segitiga atas, kita mendapatkan sistem \(T\mathbf{y} = \mathbf{c}\)
+            </div>
+            
+            <div class="step">
+                <strong>Langkah 5:</strong> Menyelesaikan sistem segitiga dengan substitusi mundur
+            </div>
+        </div>
+
+        <div class="explanation">
+            <p>Proses ini disebut sebagai "eliminasi Gauss" atau "metode eliminasi Gaussian". Metode ini sangat efisien untuk menyelesaikan sistem persamaan linear, terutama ketika diimplementasikan secara numerik dalam program komputer.</p>
+            
+            <p>Keuntungan utama dari bentuk segitiga adalah kemudahan dalam penyelesaiannya. Dengan dimulai dari persamaan terakhir yang hanya mengandung satu variabel, kita dapat mensubstitusikan nilai yang ditemukan ke persamaan sebelumnya, dan seterusnya hingga semua variabel ditemukan.</p>
+        </div>
+
+        <div class="footer">
+            <p>Halaman ini menggunakan MathJax untuk menampilkan notasi matematika.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathJax Linear Algebra Examples</title>
+    
+    <!-- Configure and Load MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['ams']}
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            startup: {
+                typeset: true
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+        
+        .math-container {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .equation {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f1f3f4;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .explanation {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Linear Algebra Equations with MathJax</h1>
+    
+    <div class="math-container">
+        <h2>Triangular Matrices</h2>
+        
+        <div class="equation">
+            <h3>Upper Triangular Matrix</h3>
+            <p>$$U = \begin{bmatrix}
+            u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
+            0 & u_{22} & u_{23} & \cdots & u_{2n} \\
+            0 & 0 & u_{33} & \cdots & u_{3n} \\
+            \vdots & \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & 0 & \cdots & u_{nn}
+            \end{bmatrix}$$</p>
+        </div>
+        
+        <div class="equation">
+            <h3>Lower Triangular Matrix</h3>
+            <p>$$L = \begin{bmatrix}
+            l_{11} & 0 & 0 & \cdots & 0 \\
+            l_{21} & l_{22} & 0 & \cdots & 0 \\
+            l_{31} & l_{32} & l_{33} & \cdots & 0 \\
+            \vdots & \vdots & \vdots & \ddots & \vdots \\
+            l_{n1} & l_{n2} & l_{n3} & \cdots & l_{nn}
+            \end{bmatrix}$$</p>
+        </div>
+        
+        <div class="explanation">
+            <p>A triangular matrix is a special type of square matrix where all the entries above or below the main diagonal are zero.</p>
+        </div>
+    </div>
+    
+    <div class="math-container">
+        <h2>LU Decomposition</h2>
+        
+        <div class="equation">
+            <p>$$A = LU$$</p>
+            <p>Where:</p>
+            <p>$$A = \begin{bmatrix}
+            a_{11} & a_{12} & a_{13} \\
+            a_{21} & a_{22} & a_{23} \\
+            a_{31} & a_{32} & a_{33}
+            \end{bmatrix},
+            L = \begin{bmatrix}
+            1 & 0 & 0 \\
+            l_{21} & 1 & 0 \\
+            l_{31} & l_{32} & 1
+            \end{bmatrix},
+            U = \begin{bmatrix}
+            u_{11} & u_{12} & u_{13} \\
+            0 & u_{22} & u_{23} \\
+            0 & 0 & u_{33}
+            \end{bmatrix}$$</p>
+        </div>
+    </div>
+    
+    <div class="math-container">
+        <h2>Solving Linear Systems</h2>
+        
+        <div class="equation">
+            <p>For a system $Ax = b$ with LU decomposition:</p>
+            <p>$$LUx = b$$</p>
+            <p>Let $Ux = y$, then solve:</p>
+            <p>$$Ly = b \quad \text{(Forward substitution)}$$</p>
+            <p>$$Ux = y \quad \text{(Backward substitution)}$$</p>
+        </div>
+        
+        <div class="equation">
+            <h3>Forward Substitution</h3>
+            <p>$$\begin{cases}
+            y_1 = b_1 \\
+            y_2 = b_2 - l_{21}y_1 \\
+            y_3 = b_3 - l_{31}y_1 - l_{32}y_2 \\
+            \vdots \\
+            y_n = b_n - \sum_{i=1}^{n-1} l_{ni}y_i
+            \end{cases}$$</p>
+        </div>
+        
+        <div class="equation">
+            <h3>Backward Substitution</h3>
+            <p>$$\begin{cases}
+            x_n = \frac{y_n}{u_{nn}} \\
+            x_{n-1} = \frac{y_{n-1} - u_{n-1,n}x_n}{u_{n-1,n-1}} \\
+            x_{n-2} = \frac{y_{n-2} - u_{n-2,n}x_n - u_{n-2,n-1}x_{n-1}}{u_{n-2,n-2}} \\
+            \vdots \\
+            x_1 = \frac{y_1 - \sum_{i=2}^n u_{1i}x_i}{u_{11}}
+            \end{cases}$$</p>
+        </div>
+    </div>
+    
+    <div class="math-container">
+        <h2>Matrix Equations</h2>
+        
+        <div class="equation">
+            <p>Matrix multiplication: $C = AB$ where $c_{ij} = \sum_{k=1}^n a_{ik}b_{kj}$</p>
+        </div>
+        
+        <div class="equation">
+            <p>Determinant of a 2x2 matrix:</p>
+            <p>$$\det(A) = \begin{vmatrix}
+            a & b \\
+            c & d
+            \end{vmatrix} = ad - bc$$</p>
+        </div>
+        
+        <div class="equation">
+            <p>Matrix inverse:</p>
+            <p>$$A^{-1} = \frac{1}{\det(A)} \begin{bmatrix}
+            d & -b \\
+            -c & a
+            \end{bmatrix}$$</p>
+        </div>
+    </div>
+
+    <script>
+        // MathJax will automatically typeset the equations on page load
+        // You can also manually trigger typesetting if needed:
+        // MathJax.typeset();
+        
+        // Example of dynamic equation insertion
+        function addEquation() {
+            const container = document.createElement('div');
+            container.className = 'equation';
+            container.innerHTML = `
+                <h3>Dynamic Equation</h3>
+                <p>$$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$</p>
+            `;
+            document.body.appendChild(container);
+            
+            // Tell MathJax to typeset the new content
+            MathJax.typeset([container]);
+        }
+    </script>
+</body>
+</html>
