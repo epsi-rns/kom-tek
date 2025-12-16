@@ -15,3 +15,12 @@ Tugas Mata Kuliah Komputasi Teknik
 * III. Initial Thinking (of the Problem)
 * IV. Idealization
 * V. Instruction (Set)
+
+-- -- --
+
+# Computational Thinking
+
+1. Decomposition
+2. Pattern Recognition
+3. Abstraction
+4. Algorithm Design
