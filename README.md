@@ -29,6 +29,6 @@ Tugas Mata Kuliah Komputasi Teknik
 
 # AI Assistant using DAI5 Framework
 
-* [Stage I: Statistical Method](https://epsi.bitbucket.io/statistics/2020/03/01/trend-overview/)
-* [Stage II: Code Refining](https://github.com/epsi-rns/codecase/tree/master/python/trend)
+* [Stage I: Statistical Method](https://epsi.bitbucket.io/statistics/2020/03/01/trend-overview/) (Past Works Reference)
+* [Stage II: Code Refining](https://github.com/epsi-rns/codecase/tree/master/python/trend) (Past Works Reference)
 * [Youtube Presentation](https://www.youtube.com/watch?v=h43noadgfss)
