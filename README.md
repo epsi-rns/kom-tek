@@ -24,3 +24,11 @@ Tugas Mata Kuliah Komputasi Teknik
 2. Pattern Recognition
 3. Abstraction
 4. Algorithm Design
+
+-- -- --
+
+# AI Assistant using DAI5 Framework
+
+* [Stage I: Statistical Method](https://epsi.bitbucket.io/statistics/2020/03/01/trend-overview/)
+* [Stage II: Code Refining](https://github.com/epsi-rns/codecase/tree/master/python/trend)
+* [Youtube Presentation](https://www.youtube.com/watch?v=h43noadgfss)
