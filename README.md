@@ -32,3 +32,4 @@ Tugas Mata Kuliah Komputasi Teknik
 * [Stage I: Statistical Method](https://epsi.bitbucket.io/statistics/2020/03/01/trend-overview/) (Past Works Reference)
 * [Stage II: Code Refining](https://github.com/epsi-rns/codecase/tree/master/python/trend) (Past Works Reference)
 * [Youtube Presentation](https://www.youtube.com/watch?v=h43noadgfss)
+* [Presentation Template](https://epsi-rns.gitlab.io/design/2022/09/01/inkscape-slide-templates-01/) (Public Domain)
